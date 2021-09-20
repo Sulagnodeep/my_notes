@@ -44,12 +44,4 @@ router.post('/logout', auth, async (req, res) => {
     }
 })
 
-router.get('/test', auth, async (req, res) => {
-    try{
-        res.send(req.user)
-    } catch (e) {
-        res.status(500).send()
-    }
-})
-
 module.exports = router
