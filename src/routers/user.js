@@ -1,8 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
-const { auth_tokens } = require('../models/user')
-const { Router } = require('express')
 const router = new express.Router()
 
 router.post('/signin', async (req, res) => {
