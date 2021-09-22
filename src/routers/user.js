@@ -44,4 +44,48 @@ router.post('/logout', auth, async (req, res) => {
     }
 })
 
+router.post('/logoutall', auth, async (req,res) => {
+    try{
+        req.user.auth_tokens = []
+        await req.user.save()
+        res.send()
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
+router.post('/me', auth, async (req,res) => {
+   res.send(req.user)
+})
+
+router.patch('/me', auth, (req,res) => {
+    const updateKeys = Object.keys(req.body)
+    const allowedKeys = ['name', 'email', 'password']
+    const isValid = updateKeys.every((key) => allowedKeys.includes(key))
+
+    if(!isValid)
+    {
+        return res.status(400).send({
+            error: 'Invalid updates!'
+        })
+    }
+
+    try{
+        updateKeys.forEach((key) => req.user[key] = req.body[key])
+        await req.user.save()
+        res.send(req.user)
+    } catch (e) {
+        res.status(400).send(e)
+    }
+})
+
+router.delete('/me', auth, async (req,res) => {
+    try {
+        await req.user.remove()
+        res.send(req.user)
+    } catch (e) {
+        res.status(500).send()
+    }
+})
+
 module.exports = router
